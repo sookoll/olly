@@ -14,11 +14,14 @@
   <body>
     <script type="module" src="/src/main.ts"></script>
     <script type="module">
-      import { Mapwrap } from './src/main';
+      import { Mapwrap, transform } from './src/main'
 
-      const mapwrap = new Mapwrap();
+      const mapwrap = new Mapwrap()
 
-      mapwrap.center([0, 0]).zoom(5).render('map');
+      mapwrap.projection('EPSG:3301')
+        .center(transform('fromLonLat', [26, 58], 'EPSG:3301'))
+        .zoom(5)
+        .render('map')
     </script>
     <div id="map"></div>
   </body>

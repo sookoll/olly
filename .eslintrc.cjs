@@ -26,4 +26,4 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   rules: {},
-};
+}
