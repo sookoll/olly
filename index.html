@@ -16,12 +16,16 @@
     <script type="module">
       import { Mapwrap, transform } from './src/main'
 
-      const mapwrap = new Mapwrap()
+      const mapwrap = new Mapwrap({
+        projection: 'EPSG:3301',
+        target: 'map'
+      })
 
-      mapwrap.projection('EPSG:3301')
+      mapwrap
         .center(transform('fromLonLat', [26, 58], 'EPSG:3301'))
         .zoom(5)
-        .render('map')
+        .baseLayer({ type: 'OSM', id: 'osm' })
+        .changeBaseLayer('osm')
     </script>
     <div id="map"></div>
   </body>

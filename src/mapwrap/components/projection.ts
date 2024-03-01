@@ -1,16 +1,25 @@
 import proj4 from 'proj4'
-import { get, fromLonLat, toLonLat, addProjection, transformExtent, transform as projTransform } from 'ol/proj'
+import {
+  get,
+  fromLonLat,
+  toLonLat,
+  addProjection,
+  transformExtent,
+  transform as projTransform,
+  addCoordinateTransforms,
+} from 'ol/proj'
 import { register } from 'ol/proj/proj4'
 import Projection, { Options } from 'ol/proj/Projection'
 import { Units } from 'ol/proj/Units'
 import { Coordinate } from 'ol/coordinate'
 import { Extent, getCenter } from 'ol/extent'
-import {Point} from 'ol/geom'
+import { Point } from 'ol/geom'
+import { DEFAULT_PROJECTIONS, PROJ_DEFINITIONS } from '../constants'
 
 export interface ProjDefinition {
   [key: string]: {
-    definition: string,
-    extent: Extent,
+    definition: string
+    extent: Extent
     units: Units
   }
 }
@@ -19,23 +28,19 @@ export enum TransformationType {
   coordinate = 'coordinate',
   fromLonLat = 'fromLonLat',
   toLonLat = 'toLonLat',
-  extent = 'extent'
-}
-
-export const DEFAULT_PROJECTIONS: string[] = ['EPSG:4326', 'EPSG:3857']
-export const DEFAULT_PROJECTION: string = DEFAULT_PROJECTIONS[1]
-
-export const PROJ_DEFINITIONS: ProjDefinition = {
-  'EPSG:3301': {
-      definition: '+proj=lcc +lat_1=59.33333333333334 +lat_2=58 +lat_0=57.51755393055556 +lon_0=24 +x_0=500000 +y_0=6375000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-      extent: [40500, 5993000, 1064500, 7017000],
-      units: 'm'
-  }
+  extent = 'extent',
 }
 
 export const getProjection = get
 
-export const setProjection = (projectionName: string, definition: string | null = null, extent: Extent = [], units: Units | null = null): Projection | null => {
+export const coordinateTransforms = addCoordinateTransforms
+
+export const setProjection = (
+  projectionName: string,
+  definition: string | null = null,
+  extent: Extent = [],
+  units: Units | null = null,
+): Projection | null => {
   if (DEFAULT_PROJECTIONS.includes(projectionName)) {
     return getProjection(projectionName)
   }
@@ -44,37 +49,42 @@ export const setProjection = (projectionName: string, definition: string | null 
     return exists
   }
   if (!definition && projectionName in PROJ_DEFINITIONS) {
-      definition = PROJ_DEFINITIONS[projectionName].definition
+    definition = PROJ_DEFINITIONS[projectionName].definition
   }
   if (!definition) {
-      return null
+    return null
   }
   if (!extent.length && projectionName in PROJ_DEFINITIONS) {
-      extent = PROJ_DEFINITIONS[projectionName].extent
+    extent = PROJ_DEFINITIONS[projectionName].extent
   }
   if (!units && projectionName in PROJ_DEFINITIONS) {
-      units = PROJ_DEFINITIONS[projectionName].units
+    units = PROJ_DEFINITIONS[projectionName].units
   }
 
   proj4.defs(projectionName, definition)
   register(proj4)
 
   const projection: Options = {
-      code: projectionName
+    code: projectionName,
   }
 
   if (extent && extent.length === 4) {
-      projection.extent = extent
+    projection.extent = extent
   }
 
   if (units) {
-      projection.units = units
+    projection.units = units
   }
 
   return addProj(projection)
 }
 
-export const transform = (type: TransformationType, input: Coordinate | Extent, proj1: string = 'EPSG:4326', proj2: string = 'EPSG:4326') => {
+export const transform = (
+  type: TransformationType,
+  input: Coordinate | Extent,
+  proj1: string = 'EPSG:4326',
+  proj2: string = 'EPSG:4326',
+) => {
   let output: Coordinate | Extent
 
   if (proj1 === proj2) {
@@ -95,30 +105,34 @@ export const transform = (type: TransformationType, input: Coordinate | Extent, 
   }
 
   switch (type) {
-      case TransformationType.coordinate:
-          output = projTransform(input, proj1, proj2)
-          break
-      case TransformationType.fromLonLat:
-          output = fromLonLat(input, proj1)
-          break
-      case TransformationType.toLonLat:
-          output = toLonLat(input, proj1)
-          break
-      case TransformationType.extent:
-          output = transformExtent(input, proj1, proj2)
-          break
+    case TransformationType.coordinate:
+      output = projTransform(input, proj1, proj2)
+      break
+    case TransformationType.fromLonLat:
+      output = fromLonLat(input, proj1)
+      break
+    case TransformationType.toLonLat:
+      output = toLonLat(input, proj1)
+      break
+    case TransformationType.extent:
+      output = transformExtent(input, proj1, proj2)
+      break
   }
 
   return output || input
 }
 
-export const pointRotationTransform = (coordinate: Coordinate, angle: number, extent: Extent) => {
+export const pointRotationTransform = (
+  coordinate: Coordinate,
+  angle: number,
+  extent: Extent,
+) => {
   const point = new Point(coordinate)
   point.rotate(angle, getCenter(extent))
   return point.getCoordinates()
 }
 
-const addProj = (options: Options): Projection => {
+export const addProj = (options: Options): Projection => {
   const proj = new Projection(options)
   addProjection(proj)
 
