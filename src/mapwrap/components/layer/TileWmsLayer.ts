@@ -11,10 +11,10 @@ export interface TileWMSLayerDef extends WMSLayerDef, TileLayerDef {
   tileSize?: number
 }
 
-export class TileLayer extends LayerTile<TileWMS> {
+export class TileWmsLayer extends LayerTile<TileWMS> {
   constructor(opts: TileWMSLayerDef) {
-    // delete opts.maxResolution
-    // delete opts.minResolution
+    delete opts.maxResolution
+    delete opts.minResolution
     const source = new TileWMS({
       ...opts,
       tileGrid:

@@ -1,18 +1,32 @@
 {
-  "name": "mapwrapper",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@sookoll/mapwrapper",
+  "author": "Mihkel Oviir",
+  "license": "MIT",
+  "version": "1.0.2",
   "type": "module",
+  "main": "dist/mapwrapper.js",
+  "types": "dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sookoll/mapwrapper"
+  },
+  "bugs": {
+    "url": "https://github.com/sookoll/mapwrapper/issues"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --emptyOutDir",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
     "fix": "npm run format && npm run lint --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:ci": "jest --coverage --config='./jest.ci-config.ts'"
+    "test:ci": "jest --coverage --config='./jest.ci-config.ts'",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -23,15 +37,28 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "glob": "^10.3.10",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ol": "^9.0.0",
     "prettier": "^3.2.5",
+    "proj4": "^2.10.0",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vite-plugin-dts": "^3.7.3"
   },
   "peerDependencies": {
     "ol": "^9.0.0",
     "proj4": "^2.10.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

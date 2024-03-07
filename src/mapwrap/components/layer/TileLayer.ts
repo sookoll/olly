@@ -8,7 +8,7 @@ export class TileLayer extends LayerTile<TileSource> {
   constructor(opts: LayerDef) {
     // delete opts.maxResolution
     // delete opts.minResolution
-    let source: TileSource = new TileSource(opts)
+    let source
     switch (opts.type) {
       case LayerType.XYZ:
         source = new XYZ(opts)

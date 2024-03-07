@@ -84,7 +84,7 @@ export const transform = (
   input: Coordinate | Extent,
   proj1: string = 'EPSG:4326',
   proj2: string = 'EPSG:4326',
-) => {
+): number[] => {
   let output: Coordinate | Extent
 
   if (proj1 === proj2) {

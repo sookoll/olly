@@ -4,10 +4,10 @@ export default {
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/src/$1',
   },
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  setupFilesAfterEnv: ['<rootDir>/test/setupTests.ts'],
   modulePathIgnorePatterns: ['./dist/'],
   coveragePathIgnorePatterns: [],
-  collectCoverageFrom: ['./src/**/*.ts', '!./src/**/*.test.ts'],
+  collectCoverageFrom: ['./src/**/*.ts', '!./test/**/*.test.ts'],
   coverageThreshold: {
     global: {
       branches: 100,

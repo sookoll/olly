@@ -5,6 +5,7 @@ import { ProjDefinition } from './components/projection'
 export const DEFAULT_TILE = 256
 export const MIN_ZOOM = 0
 export const MAX_ZOOM = 20
+export const MAP_ANIMATION = 250
 
 // Projections
 export const DEFAULT_PROJECTIONS: string[] = ['EPSG:4326', 'EPSG:3857']

@@ -11,7 +11,7 @@ import KmlGroundOverlayLayer, {
   KMLGroundOverlayDef,
 } from './layer/KmlGroundOverlayLayer'
 import { uid } from '../utils'
-import { TileWMSLayerDef } from './layer/TileWmsLayer'
+import { TileWMSLayerDef, TileWmsLayer } from './layer/TileWmsLayer'
 import { MvtLayerDef } from './layer/MvtLayer'
 
 export interface Layers {
@@ -46,7 +46,7 @@ export interface WMSLayerDef extends LayerDef {
 }
 
 export interface TileLayerDef extends LayerDef {
-  tileGrid: {
+  tileGrid?: {
     minZoom: number
     maxZoom: number
   }
@@ -121,8 +121,12 @@ export const createLayer = (
       break
     case LayerType.OSM:
     case LayerType.XYZ:
-    case LayerType.TileWMS:
       layer = new TileLayer(def)
+      break
+    case LayerType.TileWMS:
+      if ('params' in def) {
+        layer = new TileWmsLayer(def)
+      }
       break
     case LayerType.Bing:
       if ('layer' in def && 'key' in def) {

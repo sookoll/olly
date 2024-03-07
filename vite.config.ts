@@ -1,8 +1,28 @@
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import path, { resolve } from 'path'
+import dts from 'vite-plugin-dts'
+import { peerDependencies } from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  build: { lib: { entry: resolve(__dirname, 'src/main.ts'), formats: ['es'] } },
-  resolve: { alias: { src: resolve('src/') } },
+  root: path.resolve('./src'),
+  build: {
+    outDir: '../dist',
+    lib: {
+      entry: resolve(__dirname, 'src/main.ts'),
+      formats: ['es'],
+    },
+    rollupOptions: {
+      external: [/^ol\/.*/, ...Object.keys(peerDependencies)],
+      output: {
+        globals: (id) => id,
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      src: resolve('src/'),
+    },
+  },
+  plugins: [dts()],
 })
