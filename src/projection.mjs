@@ -1,46 +1,38 @@
-import proj4 from 'proj4'
+import { getCenter } from 'ol/extent'
+import { Point } from 'ol/geom'
 import {
-  get,
-  fromLonLat,
-  toLonLat,
-  addProjection,
-  transformExtent,
-  transform as projTransform,
   addCoordinateTransforms,
+  addProjection,
+  fromLonLat,
+  get,
+  toLonLat,
+  transform as projTransform,
+  transformExtent,
 } from 'ol/proj'
 import { register } from 'ol/proj/proj4'
-import Projection, { Options } from 'ol/proj/Projection'
-import { Units } from 'ol/proj/Units'
-import { Coordinate } from 'ol/coordinate'
-import { Extent, getCenter } from 'ol/extent'
-import { Point } from 'ol/geom'
-import { DEFAULT_PROJECTIONS, PROJ_DEFINITIONS } from '../constants'
+import Projection from 'ol/proj/Projection'
+import proj4 from 'proj4'
 
-export interface ProjDefinition {
-  [key: string]: {
-    definition: string
-    extent: Extent
-    units: Units
-  }
-}
-
-export enum TransformationType {
-  coordinate = 'coordinate',
-  fromLonLat = 'fromLonLat',
-  toLonLat = 'toLonLat',
-  extent = 'extent',
-}
+import { DEFAULT_PROJECTIONS, PROJ_DEFINITIONS } from './defaults'
 
 export const getProjection = get
-
 export const coordinateTransforms = addCoordinateTransforms
 
+/**
+ * Create and register projection for ol
+ *
+ * @param projectionName {string}
+ * @param definition {string}
+ * @param extent {Array<number>}
+ * @param units {string}
+ * @returns {Projection|null}
+ */
 export const setProjection = (
-  projectionName: string,
-  definition: string | null = null,
-  extent: Extent = [],
-  units: Units | null = null,
-): Projection | null => {
+  projectionName,
+  definition = null,
+  extent = [],
+  units = null,
+) => {
   if (DEFAULT_PROJECTIONS.includes(projectionName)) {
     return getProjection(projectionName)
   }
@@ -64,7 +56,7 @@ export const setProjection = (
   proj4.defs(projectionName, definition)
   register(proj4)
 
-  const projection: Options = {
+  const projection = {
     code: projectionName,
   }
 
@@ -79,13 +71,22 @@ export const setProjection = (
   return addProj(projection)
 }
 
+/**
+ * Transforms coordinate or extent from one projection to another
+ *
+ * @param type {string} one of coordinate, fromLonLat, toLonLat, extent
+ * @param input {Coordinate|Extent} coordinate or extent
+ * @param proj1 {string} Projection EPSG code
+ * @param proj2 {string} Projection EPSG code
+ * @returns {Array<number>}
+ */
 export const transform = (
-  type: TransformationType,
-  input: Coordinate | Extent,
-  proj1: string = 'EPSG:4326',
-  proj2: string = 'EPSG:4326',
-): number[] => {
-  let output: Coordinate | Extent
+  type,
+  input,
+  proj1 = 'EPSG:4326',
+  proj2 = 'EPSG:4326',
+) => {
+  let output
 
   if (proj1 === proj2) {
     return input
@@ -105,16 +106,16 @@ export const transform = (
   }
 
   switch (type) {
-    case TransformationType.coordinate:
+    case 'coordinate':
       output = projTransform(input, proj1, proj2)
       break
-    case TransformationType.fromLonLat:
+    case 'fromLonLat':
       output = fromLonLat(input, proj1)
       break
-    case TransformationType.toLonLat:
+    case 'toLonLat':
       output = toLonLat(input, proj1)
       break
-    case TransformationType.extent:
+    case 'extent':
       output = transformExtent(input, proj1, proj2)
       break
   }
@@ -122,17 +123,28 @@ export const transform = (
   return output || input
 }
 
-export const pointRotationTransform = (
-  coordinate: Coordinate,
-  angle: number,
-  extent: Extent,
-) => {
+/**
+ * Transforms coordinate for KML overlay
+ *
+ * @param coordinate {Coordinate}
+ * @param angle {number}
+ * @param extent {Extent}
+ * @returns {Coordinate}
+ */
+export const pointRotationTransform = (coordinate, angle, extent) => {
   const point = new Point(coordinate)
   point.rotate(angle, getCenter(extent))
+
   return point.getCoordinates()
 }
 
-export const addProj = (options: Options): Projection => {
+/**
+ * Add ol projection
+ *
+ * @param options {Object}
+ * @returns {Projection}
+ */
+export const addProj = (options) => {
   const proj = new Projection(options)
   addProjection(proj)
 

@@ -1,21 +1,18 @@
-import Map from 'ol/Map'
-import { Size } from 'ol/size'
-
-export const drawMap = (map: Map) => {
-  const canvases: NodeListOf<HTMLCanvasElement> = map
+export const exportMapCanvas = (map) => {
+  const canvases = map
     .getViewport()
     .querySelectorAll('.ol-layer canvas, canvas.ol-layer')
-  const size: Size | undefined = map.getSize()
-  const mapCanvas: HTMLCanvasElement = document.createElement('canvas')
+  const size = map.getSize()
+  const mapCanvas = document.createElement('canvas')
   if (size) {
     mapCanvas.width = size[0]
     mapCanvas.height = size[1]
   }
-  const mapContext: CanvasRenderingContext2D | null = mapCanvas.getContext('2d')
-  canvases.forEach((canvas: HTMLCanvasElement): void => {
+  const mapContext = mapCanvas.getContext('2d')
+  canvases.forEach((canvas) => {
     if (canvas.width > 0) {
-      const parentEl: HTMLElement | null = canvas.parentNode as HTMLElement
-      const opacity: string =
+      const parentEl = canvas.parentNode
+      const opacity =
         parentEl && parentEl.style
           ? parentEl.style.opacity
           : canvas.style.opacity
@@ -53,7 +50,7 @@ export const drawMap = (map: Map) => {
         //   mapContext,
         //   matrix,
         // )
-        const backgroundColor: string = parentEl?.style?.backgroundColor
+        const backgroundColor = parentEl?.style?.backgroundColor
         if (mapContext && backgroundColor) {
           mapContext.fillStyle = backgroundColor
           mapContext.fillRect(0, 0, canvas.width, canvas.height)

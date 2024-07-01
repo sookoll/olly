@@ -1,18 +1,14 @@
+import { getWidth } from 'ol/extent'
 import LayerTile from 'ol/layer/Tile'
-import { TileLayerDef, WMSLayerDef } from '../layer'
 import TileWMS from 'ol/source/TileWMS'
 import TileGrid from 'ol/tilegrid/TileGrid'
+
+import { DEFAULT_TILE, MAX_ZOOM, MIN_ZOOM } from '../defaults'
 import { getProjection } from '../projection'
-import { getWidth } from 'ol/extent'
-import { range } from '../../utils'
-import { DEFAULT_TILE, MAX_ZOOM, MIN_ZOOM } from '../../constants'
+import { range } from '../utilities'
 
-export interface TileWMSLayerDef extends WMSLayerDef, TileLayerDef {
-  tileSize?: number
-}
-
-export class TileWmsLayer extends LayerTile<TileWMS> {
-  constructor(opts: TileWMSLayerDef) {
+export class TileWmsLayer extends LayerTile {
+  constructor(opts) {
     delete opts.maxResolution
     delete opts.minResolution
     const source = new TileWMS({
@@ -26,7 +22,7 @@ export class TileWmsLayer extends LayerTile<TileWMS> {
   }
 }
 
-const tileGridWMS = (opts: TileWMSLayerDef): TileGrid => {
+const tileGridWMS = (opts) => {
   const tile = opts.tileSize || DEFAULT_TILE
   const projExtent = getProjection(opts.projection)?.getExtent()
   const startResolution = getWidth(projExtent || []) / tile
@@ -37,6 +33,7 @@ const tileGridWMS = (opts: TileWMSLayerDef): TileGrid => {
   for (let i = 0, ii = resolutions.length; i < ii; ++i) {
     resolutions[i] = startResolution / Math.pow(2, i)
   }
+
   return new TileGrid({
     extent: projExtent,
     resolutions: resolutions,
