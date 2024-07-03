@@ -1,35 +1,48 @@
 {
-  "name": "mapwrapper",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@sookoll/olly",
+  "author": "Mihkel Oviir",
+  "license": "MIT",
+  "version": "2.1.0",
   "type": "module",
+  "exports": {
+    "./": "./src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sookoll/olly.git"
+  },
+  "homepage": "https://github.com/sookoll/olly#readme",
+  "bugs": {
+    "url": "https://github.com/sookoll/olly/issues"
+  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:ci": "jest --coverage --config='./jest.ci-config.ts'"
+    "lint": "eslint -c .eslintrc --ext .mjs src/",
+    "lint:fix": "eslint -c .eslintrc --ext .mjs src/ --fix",
+    "format": "prettier --write ."
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.21",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
-    "eslint": "^8.57.0",
+    "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
-    "jest": "^29.7.0",
-    "prettier": "^3.2.5",
-    "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "eslint-plugin-simple-import-sort": "^12.0.0",
+    "ol": "^9.2.4",
+    "ol-mapbox-style": "^12.3.4",
+    "proj4": "^2.11.0"
   },
   "peerDependencies": {
-    "ol": "^9.0.0",
-    "proj4": "^2.10.0"
-  }
+    "ol": "^9.2.4",
+    "ol-mapbox-style": "^12.3.4",
+    "proj4": "^2.11.0"
+  },
+  "jest": {
+    "transform": {}
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
