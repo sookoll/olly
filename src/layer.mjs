@@ -1,4 +1,5 @@
 import { deepCopy, uid } from './utilities'
+import { setProjection } from './projection.mjs';
 
 export const set = (layer, opts) => {
   if (!layer) {
@@ -48,6 +49,9 @@ export const set = (layer, opts) => {
 
 export const createLayer = async (def) => {
   let layer
+  if ('projection' in def) {
+    setProjection(def.projection)
+  }
   switch (def.type) {
     case 'Group': {
       const { GroupLayer } = await import('./layer/GroupLayer')
@@ -120,6 +124,11 @@ export const createLayer = async (def) => {
         const { FeatureImageLayer } = await import('./layer/FeatureImageLayer')
         layer = new FeatureImageLayer(deepCopy(def))
       }
+      break
+    }
+    case 'MVT': {
+      const { MVTLayer } = await import('./layer/MVTLayer.mjs')
+      layer = new MVTLayer(deepCopy(def))
       break
     }
   }

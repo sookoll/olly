@@ -246,13 +246,15 @@ export class Olly {
     if (active) {
       this.toggleLayers('base')
     }
-    layer.setVisible(active)
-    layer.setZIndex(0)
-    this.getLayers('base').push(layer)
-    this.fire('layeradded', {
-      type: 'base',
-      layers: [layer],
-    })
+    if (layer) {
+      layer.setVisible(active)
+      layer.setZIndex(0)
+      this.getLayers('base').push(layer)
+      this.fire('layeradded', {
+        type: 'base',
+        layers: [ layer ],
+      })
+    }
 
     return this
   }

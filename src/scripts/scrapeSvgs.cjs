@@ -38,8 +38,3 @@ if (outFile) {
 } else {
   console.log(content)
 }
-
-
-
-//const fileName = "myFile.txt";
-//const fileData = fs.readFileSync(fileName, "utf8");
