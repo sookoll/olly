@@ -1,6 +1,6 @@
 import GeoJSONFormat from 'ol/format/GeoJSON'
 
-const formats = {
+export const formats = {
   geojson: new GeoJSONFormat(),
 }
 
