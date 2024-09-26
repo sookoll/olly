@@ -116,6 +116,11 @@ export const createLayer = async (def) => {
       }
       break
     }
+    case 'Directus': {
+      const { DirectusLayer } = await import('./layer/DirectusLayer')
+      layer = new DirectusLayer(deepCopy(def))
+      break
+    }
     case 'FeatureImage': {
       if (def.renderer && def.renderer === 'webgl') {
         const { WGLFeatureLayer } = await import('./layer/WGLFeatureLayer')

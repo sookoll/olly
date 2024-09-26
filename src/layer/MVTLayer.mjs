@@ -6,7 +6,7 @@ export class MVTLayer extends VectorTileLayer {
     super(opts)
     Promise.all([
       applyStyle(this, opts.url),
-      applyBackground(this, opts.url)
+      applyBackground(this, opts.url),
     ]).then(() => {})
   }
 }

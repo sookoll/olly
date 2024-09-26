@@ -1,4 +1,4 @@
-import { Map, View } from 'ol'
+import { Map, Overlay, View } from 'ol'
 import { ScaleLine } from 'ol/control'
 import { platformModifierKeyOnly } from 'ol/events/condition'
 import {
@@ -33,6 +33,7 @@ export class Olly {
     layeradded: [],
     layerremoved: [],
   }
+  pop = null
 
   constructor(options) {
     const defaults = {
@@ -333,6 +334,27 @@ export class Olly {
       this.getLayersArray(group).forEach((layer) => {
         layer.setVisible(ids.includes(layer.get('id')))
       })
+    }
+
+    return this
+  }
+
+  popup(el) {
+    if (el) {
+      this.pop = new Overlay({
+        element: el,
+        positioning: 'bottom-center',
+        offset: [0, -5],
+        autoPan: {
+          animation: {
+            duration: 250,
+          },
+        },
+      })
+      this._map.addOverlay(this.pop)
+    } else {
+      this._map.removeOverlay(this.pop)
+      this.pop = null
     }
 
     return this

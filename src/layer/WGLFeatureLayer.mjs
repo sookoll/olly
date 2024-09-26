@@ -17,6 +17,7 @@ export class WGLFeatureLayer extends Vector {
       style: opts.style || DEFAULT_STYLE,
     })
   }
+
   createRenderer() {
     return new WebGLVectorLayerRenderer(this, {
       style: this.getStyle(),
