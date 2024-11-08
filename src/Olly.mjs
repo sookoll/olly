@@ -232,6 +232,9 @@ export class Olly {
     if (!definition || !definition.type) {
       return null
     }
+    if (this._projection) {
+      definition.mapProjection = this._projection.getCode()
+    }
     return await createLayer(definition)
   }
 
@@ -253,7 +256,7 @@ export class Olly {
       this.getLayers('base').push(layer)
       this.fire('layeradded', {
         type: 'base',
-        layers: [ layer ],
+        layers: [layer],
       })
     }
 

@@ -116,11 +116,6 @@ export const createLayer = async (def) => {
       }
       break
     }
-    case 'Directus': {
-      const { DirectusLayer } = await import('./layer/DirectusLayer')
-      layer = new DirectusLayer(deepCopy(def))
-      break
-    }
     case 'FeatureImage': {
       if (def.renderer && def.renderer === 'webgl') {
         const { WGLFeatureLayer } = await import('./layer/WGLFeatureLayer')
@@ -131,8 +126,18 @@ export const createLayer = async (def) => {
       }
       break
     }
+    case 'Directus': {
+      const { DirectusLayer } = await import('./layer/DirectusLayer')
+      layer = new DirectusLayer(deepCopy(def))
+      break
+    }
+    case 'FeatureVT': {
+      const { FeatureVTLayer } = await import('./layer/FeatureVTLayer')
+      layer = new FeatureVTLayer(deepCopy(def))
+      break
+    }
     case 'MVT': {
-      const { MVTLayer } = await import('./layer/MVTLayer.mjs')
+      const { MVTLayer } = await import('./layer/MVTLayer')
       layer = new MVTLayer(deepCopy(def))
       break
     }
