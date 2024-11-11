@@ -2,7 +2,7 @@
   "name": "@sookoll/olly",
   "author": "Mihkel Oviir",
   "license": "MIT",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "type": "module",
   "exports": {
     "./": "./src/"
@@ -21,7 +21,8 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "geojson-vt": "^4.0.2"
+    "geojson-vt": "^4.0.2",
+    "ol-mapbox-style": "^12.3.5"
   },
   "devDependencies": {
     "eslint": "^8.48.0",
@@ -29,11 +30,11 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "ol": "^10.2.1",
-    "ol-mapbox-style": "^12.3.5",
     "proj4": "^2.14.0"
   },
   "peerDependencies": {
-    "ol-mapbox-style": "^12.3.5"
+    "ol": "^10.2.1",
+    "proj4": "^2.14.0"
   },
   "jest": {
     "transform": {}
