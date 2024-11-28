@@ -1,3 +1,5 @@
+import { getArea, getLength } from 'ol/sphere'
+
 import { transform } from './projection'
 
 /**
@@ -116,4 +118,36 @@ export const getCoordinatesDistance = (coord1, coord2) => {
   const b = Math.abs(coord1[1] - coord2[1])
 
   return Math.sqrt(a * a + b * b)
+}
+
+/**
+ * Format length
+ * @param line
+ * @returns {string}
+ */
+export const formatLength = function (line) {
+  const length = getLength(line)
+  let output
+  if (length > 100) {
+    output = Math.round((length / 1000) * 100) / 100 + ' km'
+  } else {
+    output = Math.round(length * 100) / 100 + ' m'
+  }
+  return output
+}
+
+/**
+ * Format area
+ * @param polygon
+ * @returns {string}
+ */
+export const formatArea = function (polygon) {
+  const area = getArea(polygon)
+  let output
+  if (area > 10000) {
+    output = Math.round((area / 1000000) * 100) / 100 + ' km\xB2'
+  } else {
+    output = Math.round(area * 100) / 100 + ' m\xB2'
+  }
+  return output
 }

@@ -26,6 +26,8 @@ export const DEFAULT_STYLE = {
   'circle-fill-color': 'rgba(255,255,255,0.4)',
   'circle-stroke-width': 1.25,
   'circle-stroke-color': '#3399CC',
+  'text-fill-color': 'white',
+  'text-background-fill-color': '#3399CC',
 }
 
 export const CLUSTER_DISTANCE = 25

@@ -15,6 +15,7 @@ import {
 } from './defaults'
 import { exportMapCanvas } from './export'
 import { createLayer } from './layer'
+import { Measure } from './Measure.mjs'
 import { setProjection, transform } from './projection'
 
 export class Olly {
@@ -33,6 +34,7 @@ export class Olly {
     layeradded: [],
     layerremoved: [],
   }
+  _measure = null
   pop = null
 
   constructor(options) {
@@ -399,7 +401,7 @@ export class Olly {
 
   enableListeners(type) {
     if (type in this._listeners) {
-      this._listeners['singleclick'].forEach((listener) => {
+      this._listeners[type].forEach((listener) => {
         listener.enabled = true
       })
     }
@@ -407,7 +409,7 @@ export class Olly {
 
   disableListeners(type) {
     if (type in this._listeners) {
-      this._listeners['singleclick'].forEach((listener) => {
+      this._listeners[type].forEach((listener) => {
         listener.enabled = false
       })
     }
@@ -474,5 +476,35 @@ export class Olly {
     })
 
     this._map.addControl(control)
+  }
+
+  measure(opts) {
+    if (this._measure) {
+      this.stopMeasure()
+    }
+    this._measure = new Measure(this, opts)
+    this._measure.start()
+  }
+
+  stopMeasure() {
+    if (this._measure) {
+      this._measure.stop()
+    }
+    this._measure = null
+  }
+
+  getAllFeatures() {
+    let fset = []
+    this.getLayersArray('info').forEach((layer) => {
+      if (typeof layer.getSource()?.getFeatures === 'function') {
+        fset = fset.concat(layer.getSource().getFeatures())
+      }
+    })
+    this.getLayersArray('over').forEach((layer) => {
+      if (typeof layer.getSource()?.getFeatures === 'function') {
+        fset = fset.concat(layer.getSource().getFeatures())
+      }
+    })
+    return fset
   }
 }
