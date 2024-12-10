@@ -7,6 +7,9 @@ import { createFeatures, formats } from '../feature'
 export class FeatureLayer extends Vector {
   constructor(opts) {
     const sourceOpts = { ...opts }
+    if (opts.features?.length) {
+      sourceOpts.features = createFeatures(opts.features)
+    }
     if (opts.url) {
       sourceOpts.format =
         opts.format && opts.format in formats
@@ -15,10 +18,7 @@ export class FeatureLayer extends Vector {
     }
 
     const source = new VectorSource(sourceOpts)
-    if (opts?.features?.length) {
-      const features = createFeatures(opts.features)
-      source.addFeatures(features)
-    }
+
     super({
       source,
       style: opts.style || DEFAULT_STYLE,
