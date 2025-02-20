@@ -2,7 +2,7 @@
   "name": "@sookoll/olly",
   "author": "Mihkel Oviir",
   "license": "MIT",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "type": "module",
   "exports": {
     "./": "./src/"
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "geojson-vt": "^4.0.2",
-    "ol-mapbox-style": "^12.3.5"
+    "ol-mapbox-style": "^12.4.1"
   },
   "devDependencies": {
     "eslint": "^8.48.0",
