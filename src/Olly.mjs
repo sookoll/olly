@@ -418,14 +418,18 @@ export class Olly {
   hover(cb = null) {
     if (this._map) {
       this.on('pointermove', (evt) => {
-        const pixel = evt.map.getEventPixel(evt.originalEvent)
-        const hit = evt.map.hasFeatureAtPixel(pixel)
-        const target = evt.map.getTargetElement()
-        if (target) {
-          target.style.cursor = hit ? 'pointer' : ''
-        }
-        if (typeof cb === 'function') {
-          cb(evt)
+        try {
+          const pixel = evt.map.getEventPixel(evt.originalEvent)
+          const hit = evt.map.hasFeatureAtPixel(pixel)
+          const target = evt.map.getTargetElement()
+          if (target) {
+            target.style.cursor = hit ? 'pointer' : ''
+          }
+          if (typeof cb === 'function') {
+            cb(evt)
+          }
+        } catch (err) {
+          /* empty */
         }
       })
     }
