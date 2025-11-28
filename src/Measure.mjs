@@ -8,8 +8,8 @@ import VectorSource from 'ol/source/Vector'
 import { Fill, RegularShape, Stroke, Style, Text } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 
-import { formatArea, formatLength } from './utilities.mjs'
 import { DEFAULT_STYLE } from './defaults.mjs'
+import { formatArea, formatLength } from './utilities.mjs'
 
 export class Measure {
   olly = null

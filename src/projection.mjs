@@ -13,7 +13,7 @@ import { register } from 'ol/proj/proj4'
 import Projection from 'ol/proj/Projection'
 import proj4 from 'proj4'
 
-import { DEFAULT_PROJECTIONS, PROJ_DEFINITIONS } from './defaults'
+import { DEFAULT_PROJECTIONS, PROJ_DEFINITIONS } from './defaults.mjs'
 
 export const getProjection = get
 export const coordinateTransforms = addCoordinateTransforms

@@ -2,8 +2,8 @@ import Vector from 'ol/layer/Vector'
 import ClusterSource from 'ol/source/Cluster'
 import VectorSource from 'ol/source/Vector'
 
-import { CLUSTER_DISTANCE, DEFAULT_STYLE } from '../defaults'
-import { createFeatures } from '../feature'
+import { CLUSTER_DISTANCE, DEFAULT_STYLE } from '../defaults.mjs'
+import { createFeatures } from '../feature.mjs'
 
 export class ClusterFeatureLayer extends Vector {
   constructor(opts) {
@@ -20,5 +20,17 @@ export class ClusterFeatureLayer extends Vector {
       source: clusterSource,
       style: opts.style || DEFAULT_STYLE,
     })
+  }
+
+  getLayerStatesArray(dest) {
+    return super.getLayerStatesArray(dest)
+  }
+
+  getLayersArray(array) {
+    return super.getLayersArray(array)
+  }
+
+  getSourceState() {
+    return super.getSourceState()
   }
 }

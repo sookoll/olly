@@ -1,8 +1,8 @@
 import Vector from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 
-import { DEFAULT_STYLE } from '../defaults'
-import FlatJSON from '../format/FlatJSON'
+import { DEFAULT_STYLE } from '../defaults.mjs'
+import FlatJSON from '../format/FlatJSON.mjs'
 
 export class DirectusLayer extends Vector {
   constructor(opts) {
@@ -21,5 +21,17 @@ export class DirectusLayer extends Vector {
       updateWhileAnimating: opts.updateWhileAnimating,
       updateWhileInteracting: opts.updateWhileInteracting,
     })
+  }
+
+  getLayerStatesArray(dest) {
+    return super.getLayerStatesArray(dest)
+  }
+
+  getLayersArray(array) {
+    return super.getLayersArray(array)
+  }
+
+  getSourceState() {
+    return super.getSourceState()
   }
 }

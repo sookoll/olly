@@ -6,4 +6,16 @@ export class TileLayer extends LayerTile {
     const source = new XYZ(opts)
     super({ source })
   }
+
+  getLayerStatesArray(dest) {
+    return super.getLayerStatesArray(dest)
+  }
+
+  getLayersArray(array) {
+    return super.getLayersArray(array)
+  }
+
+  getSourceState() {
+    return super.getSourceState()
+  }
 }

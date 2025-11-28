@@ -15,4 +15,16 @@ export class ImageLayer extends LayerImage {
     }
     super({ source })
   }
+
+  getLayerStatesArray(dest) {
+    return super.getLayerStatesArray(dest)
+  }
+
+  getLayersArray(array) {
+    return super.getLayersArray(array)
+  }
+
+  getSourceState() {
+    return super.getSourceState()
+  }
 }

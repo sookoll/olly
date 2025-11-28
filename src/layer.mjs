@@ -1,5 +1,5 @@
-import { deepCopy, uid } from './utilities'
-import { setProjection } from './projection.mjs';
+import { setProjection } from './projection.mjs'
+import { deepCopy, uid } from './utilities.mjs'
 
 export const set = (layer, opts) => {
   if (!layer) {
@@ -52,9 +52,10 @@ export const createLayer = async (def) => {
   if ('projection' in def) {
     setProjection(def.projection)
   }
+  def.crossOrigin = def.crossOrigin || 'anonymous'
   switch (def.type) {
     case 'Group': {
-      const { GroupLayer } = await import('./layer/GroupLayer')
+      const { GroupLayer } = await import('./layer/GroupLayer.mjs')
       const arr = def.layers
         ? def.layers.map((conf) => {
             const inputConf = deepCopy(conf)
@@ -78,32 +79,32 @@ export const createLayer = async (def) => {
       break
     }
     case 'OSM': {
-      const { OsmLayer } = await import('./layer/OsmLayer')
+      const { OsmLayer } = await import('./layer/OsmLayer.mjs')
       layer = new OsmLayer(deepCopy(def))
       break
     }
     case 'XYZ':
     case 'TMS': {
-      const { TileLayer } = await import('./layer/TileLayer')
+      const { TileLayer } = await import('./layer/TileLayer.mjs')
       layer = new TileLayer(deepCopy(def))
       break
     }
     case 'TileWMS': {
-      const { TileWmsLayer } = await import('./layer/TileWmsLayer')
+      const { TileWmsLayer } = await import('./layer/TileWmsLayer.mjs')
       if ('params' in def) {
         layer = new TileWmsLayer(deepCopy(def))
       }
       break
     }
     case 'ImageWMS': {
-      const { ImageLayer } = await import('./layer/ImageLayer')
+      const { ImageLayer } = await import('./layer/ImageLayer.mjs')
       layer = new ImageLayer(deepCopy(def))
       break
     }
     case 'Features':
     case 'FeatureCollection': {
       if (def.renderer && def.renderer === 'webgl') {
-        const { WGLFeatureLayer } = await import('./layer/WGLFeatureLayer')
+        const { WGLFeatureLayer } = await import('./layer/WGLFeatureLayer.mjs')
         layer = new WGLFeatureLayer(deepCopy(def))
       } else if (def.clusters) {
         const { ClusterFeatureLayer } = await import(
@@ -111,33 +112,35 @@ export const createLayer = async (def) => {
         )
         layer = new ClusterFeatureLayer(deepCopy(def))
       } else {
-        const { FeatureLayer } = await import('./layer/FeatureLayer')
+        const { FeatureLayer } = await import('./layer/FeatureLayer.mjs')
         layer = new FeatureLayer(deepCopy(def))
       }
       break
     }
     case 'FeatureImage': {
       if (def.renderer && def.renderer === 'webgl') {
-        const { WGLFeatureLayer } = await import('./layer/WGLFeatureLayer')
+        const { WGLFeatureLayer } = await import('./layer/WGLFeatureLayer.mjs')
         layer = new WGLFeatureLayer(deepCopy(def))
       } else {
-        const { FeatureImageLayer } = await import('./layer/FeatureImageLayer')
+        const { FeatureImageLayer } = await import(
+          './layer/FeatureImageLayer.mjs'
+        )
         layer = new FeatureImageLayer(deepCopy(def))
       }
       break
     }
     case 'Directus': {
-      const { DirectusLayer } = await import('./layer/DirectusLayer')
+      const { DirectusLayer } = await import('./layer/DirectusLayer.mjs')
       layer = new DirectusLayer(deepCopy(def))
       break
     }
     case 'FeatureVT': {
-      const { FeatureVTLayer } = await import('./layer/FeatureVTLayer')
+      const { FeatureVTLayer } = await import('./layer/FeatureVTLayer.mjs')
       layer = new FeatureVTLayer(deepCopy(def))
       break
     }
     case 'MVT': {
-      const { MVTLayer } = await import('./layer/MVTLayer')
+      const { MVTLayer } = await import('./layer/MVTLayer.mjs')
       layer = new MVTLayer(deepCopy(def))
       break
     }

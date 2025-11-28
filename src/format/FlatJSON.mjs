@@ -1,8 +1,8 @@
 /**
  * @module ol/format/FlatJSON
  */
-import JSONFeature from 'ol/format/JSONFeature'
 import GeoJSON from 'ol/format/GeoJSON'
+import JSONFeature from 'ol/format/JSONFeature'
 import { get as getProjection } from 'ol/proj'
 /**
  * @typedef {import("geojson").GeoJSON} GeoJSONObject

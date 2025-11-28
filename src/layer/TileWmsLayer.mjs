@@ -3,9 +3,9 @@ import LayerTile from 'ol/layer/Tile'
 import TileWMS from 'ol/source/TileWMS'
 import TileGrid from 'ol/tilegrid/TileGrid'
 
-import { DEFAULT_TILE, MAX_ZOOM, MIN_ZOOM } from '../defaults'
-import { getProjection } from '../projection'
-import { range } from '../utilities'
+import { DEFAULT_TILE, MAX_ZOOM, MIN_ZOOM } from '../defaults.mjs'
+import { getProjection } from '../projection.mjs'
+import { range } from '../utilities.mjs'
 
 export class TileWmsLayer extends LayerTile {
   constructor(opts) {
@@ -19,6 +19,18 @@ export class TileWmsLayer extends LayerTile {
           : undefined,
     })
     super({ source })
+  }
+
+  getLayerStatesArray(dest) {
+    return super.getLayerStatesArray(dest)
+  }
+
+  getLayersArray(array) {
+    return super.getLayersArray(array)
+  }
+
+  getSourceState() {
+    return super.getSourceState()
   }
 }
 

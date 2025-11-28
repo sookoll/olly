@@ -2,8 +2,8 @@ import Vector from 'ol/layer/Vector'
 import WebGLVectorLayerRenderer from 'ol/renderer/webgl/VectorLayer'
 import VectorSource from 'ol/source/Vector'
 
-import { DEFAULT_STYLE } from '../defaults'
-import { createFeatures } from '../feature'
+import { DEFAULT_STYLE } from '../defaults.mjs'
+import { createFeatures } from '../feature.mjs'
 
 export class WGLFeatureLayer extends Vector {
   constructor(opts) {
@@ -16,6 +16,18 @@ export class WGLFeatureLayer extends Vector {
       source,
       style: opts.style || DEFAULT_STYLE,
     })
+  }
+
+  getLayerStatesArray(dest) {
+    return super.getLayerStatesArray(dest)
+  }
+
+  getLayersArray(array) {
+    return super.getLayersArray(array)
+  }
+
+  getSourceState() {
+    return super.getSourceState()
   }
 
   createRenderer() {

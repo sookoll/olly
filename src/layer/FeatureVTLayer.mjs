@@ -1,9 +1,10 @@
-import VectorTileLayer from 'ol/layer/VectorTile'
-import VectorTileSource from 'ol/source/VectorTile'
-import { DEFAULT_PROJECTION, DEFAULT_STYLE } from '../defaults.mjs'
-import { TopoJSON, GeoJSON } from 'ol/format'
 import geojsonvt from 'geojson-vt'
+import { GeoJSON, TopoJSON } from 'ol/format'
+import VectorTileLayer from 'ol/layer/VectorTile'
 import Projection from 'ol/proj/Projection'
+import VectorTileSource from 'ol/source/VectorTile'
+
+import { DEFAULT_PROJECTION, DEFAULT_STYLE } from '../defaults.mjs'
 
 export class FeatureVTLayer extends VectorTileLayer {
   constructor(opts) {
@@ -25,6 +26,18 @@ export class FeatureVTLayer extends VectorTileLayer {
         .then((json) => this.parseGeoJSON(json))
         .then((geojson) => this.setSourceTileLoadFunction(geojson))
     }
+  }
+
+  getLayerStatesArray(dest) {
+    return super.getLayerStatesArray(dest)
+  }
+
+  getLayersArray(array) {
+    return super.getLayersArray(array)
+  }
+
+  getSourceState() {
+    return super.getSourceState()
   }
 
   async load(url) {

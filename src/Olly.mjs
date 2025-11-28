@@ -12,11 +12,11 @@ import {
   MAP_ANIMATION,
   MAX_ZOOM,
   MIN_ZOOM,
-} from './defaults'
-import { exportMapCanvas } from './export'
-import { createLayer } from './layer'
+} from './defaults.mjs'
+import { exportMapCanvas } from './export.mjs'
+import { createLayer } from './layer.mjs'
 import { Measure } from './Measure.mjs'
-import { setProjection, transform } from './projection'
+import { setProjection, transform } from './projection.mjs'
 
 export class Olly {
   options = null
@@ -101,7 +101,7 @@ export class Olly {
 
   view(props) {
     const viewProps = {
-      projection: this._projection.getCode(),
+      projection: this._projection,
     }
     if (props.extent) {
       viewProps.showFullExtent = true
@@ -152,6 +152,15 @@ export class Olly {
     }
 
     return this
+  }
+
+  getView() {
+    return {
+      center: this._view.getCenter(),
+      zoom: this._view.getZoom(),
+      rotation: this._view.getRotation(),
+      extent: this._view.calculateExtent(this._map.getSize()),
+    }
   }
 
   center(center = [0, 0], animate = false) {
@@ -217,6 +226,15 @@ export class Olly {
       bbox = layer.getSource().getExtent()
     } else {
       bbox = layer.getExtent()
+    }
+
+    return this.fitTo(bbox)
+  }
+
+  fitToSource(source) {
+    let bbox = []
+    if (typeof source.getExtent !== 'undefined') {
+      bbox = source.getExtent()
     }
 
     return this.fitTo(bbox)
@@ -344,10 +362,9 @@ export class Olly {
     return this
   }
 
-  popup(el) {
+  popup(el, opts = {}) {
     if (el) {
-      this.pop = new Overlay({
-        element: el,
+      const defaults = {
         positioning: 'bottom-center',
         offset: [0, -5],
         autoPan: {
@@ -355,6 +372,11 @@ export class Olly {
             duration: 250,
           },
         },
+      }
+      this.pop = new Overlay({
+        ...defaults,
+        ...opts,
+        element: el,
       })
       this._map.addOverlay(this.pop)
     } else {
@@ -417,24 +439,44 @@ export class Olly {
 
   hover(cb = null) {
     if (this._map) {
-      this.on('pointermove', (evt) => {
-        try {
-          const pixel = evt.map.getEventPixel(evt.originalEvent)
-          const hit = evt.map.hasFeatureAtPixel(pixel)
-          const target = evt.map.getTargetElement()
-          if (target) {
-            target.style.cursor = hit ? 'pointer' : ''
-          }
-          if (typeof cb === 'function') {
-            cb(evt)
-          }
-        } catch (err) {
-          /* empty */
-        }
-      })
+      this.on('pointermove', (evt) => this.mouseMove(evt, cb))
     }
 
     return this
+  }
+
+  removeHover(cb = null) {
+    this.off('pointermove', (evt) => this.mouseMove(evt, cb))
+  }
+
+  mouseMove(evt, cb = null) {
+    if (evt.dragging) {
+      return
+    }
+    try {
+      const pixel = evt.map.getEventPixel(evt.originalEvent)
+      let hit = evt.map.hasFeatureAtPixel(pixel)
+      if (!hit) {
+        const hitData = this.getLayersArray('info').map((layer) => {
+          const data = layer.getData(evt.pixel)
+          // transparent pixels have zero for data[3]
+          if (data && data.length) {
+            return data[3]
+          }
+          return 0
+        })
+        hit = hitData.reduce((partialSum, a) => partialSum + a, 0)
+      }
+      const target = evt.map.getTargetElement()
+      if (target) {
+        target.style.cursor = hit ? 'pointer' : ''
+      }
+      if (typeof cb === 'function') {
+        cb(evt)
+      }
+    } catch (err) {
+      /* empty */
+    }
   }
 
   click(cb, hover = true) {

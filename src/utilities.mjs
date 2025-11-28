@@ -1,6 +1,6 @@
 import { getArea, getLength } from 'ol/sphere'
 
-import { transform } from './projection'
+import { transform } from './projection.mjs'
 
 /**
  * Generate array of numbers from start to end
